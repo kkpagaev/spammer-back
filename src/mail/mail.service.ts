@@ -5,7 +5,7 @@ export class MailService {
 
   async sendMail() {
     await this.transporter.sendMail({
-      from: "kapagaev111@gmail.com",
+      from: process.env.MAIL_FROM,
       to: "kkpagaev@gmail.com",
       subject: "Hello",
       text: "Hello world",
