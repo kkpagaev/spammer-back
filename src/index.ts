@@ -5,7 +5,7 @@ import helmet from "helmet"
 import { createDataSource } from "./data-source"
 import { Request, Response } from "express"
 import { json, urlencoded } from "body-parser"
-import { Router } from "./router"
+import { APIRouter } from "./router"
 import { getConfig } from "./core/config/config"
 import { TargetService } from "./targets/target.service"
 import { TargetController } from "./targets/target.cotroller"
@@ -21,6 +21,8 @@ async function main() {
     })
   )
 
+  app.set("view engine", "hbs")
+
   app.use(json())
   app.use(helmet())
 
@@ -35,26 +37,34 @@ async function main() {
   const targetController = new TargetController(targetService)
 
   // router
-  const router = new Router(app)
+  const apiRouter = new APIRouter(app)
 
-  router.get("/target", async (req: Request, res: Response) => {
+  apiRouter.get("/target", async (req: Request, res: Response) => {
     await targetController.paginate(req, res)
   })
 
-  router.post("/target", async (req: Request, res: Response) => {
+  apiRouter.post("/target", async (req: Request, res: Response) => {
     await targetController.create(req, res)
   })
 
-  router.get("/target/:id", async (req: Request, res: Response) => {
+  apiRouter.get("/target/:id", async (req: Request, res: Response) => {
     await targetController.getOne(req, res)
   })
 
-  router.put("/target/:id", async (req: Request, res: Response) => {
+  apiRouter.put("/target/:id", async (req: Request, res: Response) => {
     await targetController.update(req, res)
   })
 
-  router.delete("/target/:id", async (req: Request, res: Response) => {
+  apiRouter.delete("/target/:id", async (req: Request, res: Response) => {
     await targetController.delete(req, res)
+  })
+
+  app.get("/", (_req: Request, res: Response) => {
+    res.render("index")
+  })
+
+  app.get("/targets", (_req: Request, res: Response) => {
+    res.render("targets")
   })
 
   app.listen(port, () => console.log(`Server is listening on port ${port}!`))

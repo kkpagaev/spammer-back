@@ -1,11 +1,11 @@
 import { Application, Request, Response } from "express"
 import { exceptionFilter } from "./core/exception-filter"
 
-export class Router {
+export class APIRouter {
   constructor(private app: Application) {}
 
   get(path: string, callback: (req: Request, res: Response) => Promise<void>) {
-    this.app.get(path, async (req: Request, res: Response) => {
+    this.app.get("/api" + path, async (req: Request, res: Response) => {
       await exceptionFilter(async () => {
         await callback(req, res)
       }, res)
@@ -13,7 +13,7 @@ export class Router {
   }
 
   post(path: string, callback: (req: Request, res: Response) => Promise<void>) {
-    this.app.post(path, async (req: Request, res: Response) => {
+    this.app.post("/api" + path, async (req: Request, res: Response) => {
       await exceptionFilter(async () => {
         await callback(req, res)
       }, res)
@@ -21,7 +21,7 @@ export class Router {
   }
 
   put(path: string, callback: (req: Request, res: Response) => Promise<void>) {
-    this.app.put(path, async (req: Request, res: Response) => {
+    this.app.put("/api" + path, async (req: Request, res: Response) => {
       await exceptionFilter(async () => {
         await callback(req, res)
       }, res)
@@ -32,7 +32,7 @@ export class Router {
     path: string,
     callback: (req: Request, res: Response) => Promise<void>
   ) {
-    this.app.delete(path, async (req: Request, res: Response) => {
+    this.app.delete("/api" + path, async (req: Request, res: Response) => {
       await exceptionFilter(async () => {
         await callback(req, res)
       }, res)
