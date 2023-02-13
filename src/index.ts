@@ -36,13 +36,16 @@ async function main() {
   // mailer
   const transport = createTransport(config.mail)
 
-  await transport.verify((err) => {
+  transport.verify((err) => {
     if (err) {
       console.error(err)
     } else {
       console.log("Server is ready to take our messages")
     }
   })
+
+  const mailService = new MailService(transport)
+
   // typeorm
   const dataSource = createDataSource(config.db)
   await dataSource.initialize()
