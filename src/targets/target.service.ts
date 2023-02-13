@@ -1,4 +1,4 @@
-import { Repository } from "typeorm"
+import { In, Repository } from "typeorm"
 import { Service } from "../core/base-service"
 import NotFoundException from "../core/exceptions/not-found.exception"
 import { CreateTargetDto } from "./dto/create-target.dto"
@@ -50,5 +50,14 @@ export class TargetService extends Service {
   async deleteTarget(id: number): Promise<Target> {
     const target = await this.getTarget(id)
     return this.targetRepository.remove(target)
+  }
+
+  async findByIds(targetIds: number[]) {
+    const targets = await this.targetRepository.find({
+      where: {
+        id: In(targetIds),
+      },
+    })
+    return targets
   }
 }

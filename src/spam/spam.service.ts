@@ -1,14 +1,18 @@
 import { Repository } from "typeorm"
+import { Service } from "../core/base-service"
 import { MailService } from "../mail/mail.service"
 import { TargetService } from "../targets/target.service"
+import { CreateSpamDto } from "./dto/create-spam.dto"
 import { Spam } from "./enitities/spam.enity"
 
-export class SpamService {
+export class SpamService extends Service {
   constructor(
     private mailService: MailService,
     private targetService: TargetService,
     private spamRepository: Repository<Spam>
-  ) {}
+  ) {
+    super()
+  }
 
   async create(title: string, content: string) {
     const spam = new Spam()
@@ -20,8 +24,11 @@ export class SpamService {
     return result
   }
 
-  async sendSpam() {
-    const targets = await this.targetService.getAll()
+  async sendSpam(targetIds: number[], dto: CreateSpamDto) {
+    await this.validate(dto)
+
+    const targets = await this.targetService.findByIds(targetIds)
+
     const mails = targets.map((target) => target.email)
 
     await this.mailService.sendMailList(mails, "Spam", "Spam content")

@@ -1,20 +1,27 @@
 import { SpamService } from "./spam.service"
 import { Request, Response } from "express"
+import { CreateSpamDto } from "./dto/create-spam.dto"
 
 export class SpamController {
   constructor(private spamService: SpamService) {}
 
   async send(req: Request, res: Response) {
-    // const { title, content } = req.body
+    const dto = new CreateSpamDto()
+    dto.title = req.body.title
+    dto.content = req.body.content
 
-    // const result = await this.spamService.create(title, content)
+    const targetIdsStr: string[] = req.body.target_id
 
-    await this.spamService.sendSpam()
+    const targets = targetIdsStr.map((str: string) => {
+      return parseInt(str, 10)
+    })
+
+    await this.spamService.sendSpam(targets, dto)
 
     res.redirect("/spam")
   }
 
-  create(_req: Request, res: Response) {
+  create(req: Request, res: Response) {
     res.render("spam/create")
   }
 }

@@ -1,32 +1,41 @@
 <h2>
   list of targets
 </h2>
-<table class="table table-sm">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Прізвище</th>
-      <th scope="col">Ім'я</th>
-      <th scope="col">По батькові</th>
-      <th scope="col">Email</th>
-      <th scope="col">Дії</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each targets}}
+
+<form action="/spam" method="get">
+  <table class="table table-sm">
+    <thead>
       <tr>
-        <th scope="row">{{this.id}}</th>
-        <td><a href="/targets/{{this.id}}">
-            {{this.surname}}
-          </a></td>
-        <td>{{this.name}}</td>
-        <td>{{this.patronymic}}</td>
-        <td>{{this.email}}</td>
-        <td><form action="/targets/{{this.id}}?_method=DELETE" method="POST">
-            <input type="hidden" name="_method" value="DELETE" />
-            <button type="submit" class="btn btn-danger">Delete</button>
-          </form></td>
+        <th scope="col">#</th>
+        <th scope="col">Прізвище</th>
+        <th scope="col">Ім'я</th>
+        <th scope="col">По батькові</th>
+        <th scope="col">Email</th>
+        <th scope="col">Дії</th>
       </tr>
-    {{/each}}
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      {{#each targets}}
+        <tr>
+          <th scope="row">{{this.id}}</th>
+          <td><a href="/targets/{{this.id}}">
+              {{this.surname}}
+            </a></td>
+          <td>{{this.name}}</td>
+          <td>{{this.patronymic}}</td>
+          <td>{{this.email}}</td>
+          <td>
+            <input type="checkbox" name="target_id[]" value="{{this.id}}" />
+          </td>
+        </tr>
+      {{/each}}
+      <tr>
+        <td colspan="6">
+          <button type="submit" class="btn btn-info">Spam</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</form>

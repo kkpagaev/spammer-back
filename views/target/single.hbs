@@ -9,4 +9,8 @@
   <a href="/targets/{{target.id}}/edit" class="btn btn-success">
     Edit
   </a>
+  <form action="/targets/{{this.id}}?_method=DELETE" method="POST">
+    {{this.id}}
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </form>
 </div>
