@@ -12,6 +12,10 @@ import { Target } from "./targets/entities/target.entity"
 import { TargetController } from "./targets/target.controller"
 import * as methodOverride from "method-override"
 import { createTransport } from "nodemailer"
+import { MailService } from "./mail/mail.service"
+import { Spam } from "./spam/enitities/spam.enity"
+import { SpamService } from "./spam/spam.service"
+import { SpamController } from "./spam/spam.controller"
 
 async function main() {
   dotenv.config()
@@ -34,7 +38,13 @@ async function main() {
   const config = getConfig()
 
   // mailer
-  const transport = createTransport(config.mail)
+  const transport = createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+  })
 
   transport.verify((err) => {
     if (err) {
@@ -54,6 +64,15 @@ async function main() {
   const targetRepository = dataSource.getRepository(Target)
   const targetService = new TargetService(targetRepository)
   const targetController = new TargetController(targetService)
+
+  // spam
+  const spamRepository = dataSource.getRepository(Spam)
+  const spamService = new SpamService(
+    mailService,
+    targetService,
+    spamRepository
+  )
+  const spamController = new SpamController(spamService)
 
   // router
   const apiRouter = new APIRouter(app)
@@ -110,6 +129,14 @@ async function main() {
 
   app.delete("/targets/:id", async (req: Request, res: Response) => {
     await targetController.delete(req, res)
+  })
+
+  app.get("/spam", (_req: Request, res: Response) => {
+    spamController.create(_req, res)
+  })
+
+  app.post("/spam", async (req: Request, res: Response) => {
+    await spamController.send(req, res)
   })
 
   app.listen(port, () => console.log(`Server is listening on port ${port}!`))
