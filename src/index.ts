@@ -11,6 +11,7 @@ import { TargetService } from "./targets/target.service"
 import { Target } from "./targets/entities/target.entity"
 import { TargetController } from "./targets/target.controller"
 import * as methodOverride from "method-override"
+import { createTransport } from "nodemailer"
 
 async function main() {
   dotenv.config()
@@ -31,6 +32,17 @@ async function main() {
   app.use(helmet())
 
   const config = getConfig()
+
+  // mailer
+  const transport = createTransport(config.mail)
+
+  await transport.verify((err) => {
+    if (err) {
+      console.error(err)
+    } else {
+      console.log("Server is ready to take our messages")
+    }
+  })
   // typeorm
   const dataSource = createDataSource(config.db)
   await dataSource.initialize()

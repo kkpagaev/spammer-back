@@ -25,6 +25,17 @@ services:
       - 7780:80
     environment:
       - PMA_ARBITRARY=1
-
+  fakesmtp:
+    image: gessnerfl/fake-smtp-server:1.10.4
+    restart: unless-stopped
+    environment:
+      - FAKESMTP_PORT=5025
+      - FAKESMTP_FORWARDEMAILS=false
+      - FAKESMTP_AUTHENTICATION_USERNAME=username
+      - FAKESMTP_AUTHENTICATION_PASSWORD=password
+      - SERVER_PORT=5080
+    ports:
+      - 7025:5025
+      - 7082:5080
 volumes:
   dbv:
