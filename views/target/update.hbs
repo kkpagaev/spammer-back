@@ -1,0 +1,52 @@
+<h2>Update target</h2>
+<form
+  method="POST"
+  action="/targets/{{target.id}}?_method=PUT"
+  enctype="application/x-www-form-urlencoded"
+>
+  <input type="hidden" name="_method" value="PUT" />
+  <div class="form-group p-10">
+    <label for="exampleInputEmail1">Email address</label>
+    <input
+      type="email"
+      name="email"
+      class="form-control"
+      id="exampleInputEmail1"
+      aria-describedby="emailHelp"
+      placeholder="Enter email"
+      value="{{target.email}}"
+    />
+  </div>
+  <br />
+  <div class="row">
+    <div class="col">
+      <input
+        type="text"
+        name="name"
+        class="form-control"
+        placeholder="First name"
+        value="{{target.name}}"
+      />
+    </div>
+    <div class="col">
+      <input
+        type="text"
+        name="surname"
+        class="form-control"
+        placeholder="Last name"
+        value="{{target.surname}}"
+      />
+    </div>
+    <div class="col">
+      <input
+        type="text"
+        name="patronymic"
+        class="form-control"
+        placeholder="Last name"
+        value="{{target.patronymic}}"
+      />
+    </div>
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

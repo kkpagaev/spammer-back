@@ -15,5 +15,5 @@ export class Target {
   patronymic: string
 
   @Column()
-  email: boolean
+  email: string
 }

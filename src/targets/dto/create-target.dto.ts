@@ -13,5 +13,5 @@ export class CreateTargetDto {
   patronymic: string
   @IsEmail()
   @IsNotEmpty()
-  email: boolean
+  email: string
 }

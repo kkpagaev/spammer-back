@@ -26,6 +26,12 @@ export class TargetService extends Service {
     return target
   }
 
+  async getAll(): Promise<Target[]> {
+    const targets = await this.targetRepository.find()
+
+    return targets
+  }
+
   async getTargets(limit: number, offset: number): Promise<Target[]> {
     const targets = await this.targetRepository.find({
       take: limit,

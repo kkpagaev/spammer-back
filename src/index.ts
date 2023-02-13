@@ -8,18 +8,22 @@ import { json, urlencoded } from "body-parser"
 import { APIRouter } from "./router"
 import { getConfig } from "./core/config/config"
 import { TargetService } from "./targets/target.service"
-import { TargetController } from "./targets/target.cotroller"
 import { Target } from "./targets/entities/target.entity"
+import { TargetController } from "./targets/target.controller"
+import * as methodOverride from "method-override"
 
 async function main() {
   dotenv.config()
   const app: Application = express()
   const port = process.env.PORT || 3000
+  app.use(methodOverride("_method"))
   app.use(
     urlencoded({
       extended: true,
     })
   )
+
+  app.use(express.static("public"))
 
   app.set("view engine", "hbs")
 
@@ -63,8 +67,34 @@ async function main() {
     res.render("index")
   })
 
-  app.get("/targets", (_req: Request, res: Response) => {
-    res.render("targets")
+  app.get("/targets", async (_req: Request, res: Response) => {
+    await targetController.list(_req, res)
+  })
+
+  app.get("/targets/create", (_req: Request, res: Response) => {
+    targetController.createForm(_req, res)
+  })
+
+  app.post("/targets/create", async (req: Request, res: Response) => {
+    await targetController.create(req, res)
+  })
+
+  app.use("/static", express.static("public"))
+
+  app.get("/targets/:id", async (req: Request, res: Response) => {
+    await targetController.single(req, res)
+  })
+
+  app.get("/targets/:id/edit", async (req: Request, res: Response) => {
+    await targetController.updateForm(req, res)
+  })
+
+  app.put("/targets/:id", async (req: Request, res: Response) => {
+    await targetController.update(req, res)
+  })
+
+  app.delete("/targets/:id", async (req: Request, res: Response) => {
+    await targetController.delete(req, res)
   })
 
   app.listen(port, () => console.log(`Server is listening on port ${port}!`))
