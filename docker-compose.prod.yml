@@ -1,0 +1,27 @@
+version: "3.1"
+services:
+  app:
+    networks:
+      - rest-prod
+    image: rest:latest
+    restart: always
+    ports:
+      - 4000:5000
+  db:
+    networks:
+      - rest-prod
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "user"
+      MYSQL_ROOT_PASSWORD: "root"
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+      ]
+networks:
+  rest-prod:

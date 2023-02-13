@@ -1,0 +1,22 @@
+version: "3.1"
+services:
+  test-db:
+    networks:
+      - rest-test
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "user"
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - 3334:3306
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+      ]
+networks:
+  rest-test:
