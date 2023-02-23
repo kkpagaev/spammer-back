@@ -18,10 +18,8 @@ export class SpamController {
 
     await this.spamService.sendSpam(targets, dto)
 
-    res.redirect("/spam")
-  }
-
-  create(req: Request, res: Response) {
-    res.render("spam/create")
+    res.status(200).json({
+      message: "success",
+    })
   }
 }

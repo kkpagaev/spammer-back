@@ -30,8 +30,6 @@ async function main() {
 
   app.use(express.static("public"))
 
-  app.set("view engine", "hbs")
-
   app.use(json())
   app.use(helmet())
 
@@ -86,7 +84,7 @@ async function main() {
   })
 
   apiRouter.get("/target/:id", async (req: Request, res: Response) => {
-    await targetController.getOne(req, res)
+    await targetController.single(req, res)
   })
 
   apiRouter.put("/target/:id", async (req: Request, res: Response) => {
@@ -105,10 +103,6 @@ async function main() {
     await targetController.list(_req, res)
   })
 
-  app.get("/targets/create", (_req: Request, res: Response) => {
-    targetController.createForm(_req, res)
-  })
-
   app.post("/targets/create", async (req: Request, res: Response) => {
     await targetController.create(req, res)
   })
@@ -119,20 +113,12 @@ async function main() {
     await targetController.single(req, res)
   })
 
-  app.get("/targets/:id/edit", async (req: Request, res: Response) => {
-    await targetController.updateForm(req, res)
-  })
-
   app.put("/targets/:id", async (req: Request, res: Response) => {
     await targetController.update(req, res)
   })
 
   app.delete("/targets/:id", async (req: Request, res: Response) => {
     await targetController.delete(req, res)
-  })
-
-  app.get("/spam", (_req: Request, res: Response) => {
-    spamController.create(_req, res)
   })
 
   app.post("/spam", async (req: Request, res: Response) => {

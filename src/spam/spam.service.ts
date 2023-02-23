@@ -31,6 +31,6 @@ export class SpamService extends Service {
 
     const mails = targets.map((target) => target.email)
 
-    await this.mailService.sendMailList(mails, "Spam", "Spam content")
+    await this.mailService.sendMailList(mails, dto.title, dto.content)
   }
 }

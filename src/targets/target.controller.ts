@@ -6,17 +6,17 @@ import { UpdateTargetDto } from "./dto/update-target.dto"
 export class TargetController {
   constructor(private targetService: TargetService) {}
 
-  async list(req: Request, res: Response): Promise<void> {
+  async list(_req: Request, res: Response): Promise<void> {
     const targets = await this.targetService.getAll()
 
-    res.render("target/list", { targets })
+    res.json(targets)
   }
 
   async single(req: Request, res: Response): Promise<void> {
     const id = +req.params.id
     const target = await this.targetService.getTarget(id)
 
-    res.render("target/single", { target })
+    res.json(target)
   }
 
   async paginate(req: Request, res: Response): Promise<void> {
@@ -24,11 +24,7 @@ export class TargetController {
     const page = +req.query.page || 1
     const books = await this.targetService.getTargets(page, limit)
 
-    res.status(200).send(books)
-  }
-
-  createForm(_req: Request, res: Response) {
-    res.render("target/create")
+    res.json(books)
   }
 
   async create(req: Request, res: Response) {
@@ -40,21 +36,7 @@ export class TargetController {
 
     const target = await this.targetService.createTarget(dto)
 
-    res.redirect(`/targets/${target.id}`)
-  }
-
-  async getOne(req: Request, res: Response) {
-    const id = +req.params.id
-    const target = await this.targetService.getTarget(id)
-
-    res.status(200).send(target)
-  }
-
-  async updateForm(req: Request, res: Response) {
-    const id = +req.params.id
-    const target = await this.targetService.getTarget(id)
-
-    res.render("target/update", { target })
+    res.status(201).send(target)
   }
 
   async update(req: Request, res: Response) {
@@ -65,15 +47,24 @@ export class TargetController {
     dto.patronymic = req.body.patronymic
     dto.email = req.body.email
 
-    const target = await this.targetService.updateTarget(id, dto)
+    try {
+      const target = await this.targetService.updateTarget(id, dto)
 
-    res.redirect(`/targets/${target.id}`)
+      res.redirect(`/targets/${target.id}`)
+    } catch (e) {
+      res.status(400).send(e.message)
+    }
   }
 
   async delete(req: Request, res: Response) {
     const id = +req.params.id
-    await this.targetService.deleteTarget(id)
 
-    res.redirect("/targets")
+    try {
+      await this.targetService.deleteTarget(id)
+
+      res.status(204).send()
+    } catch (e) {
+      res.status(400).send(e.message)
+    }
   }
 }
