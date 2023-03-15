@@ -2,6 +2,8 @@ import { TargetService } from "./target.service"
 import { Request, Response } from "express"
 import { CreateTargetDto } from "./dto/create-target.dto"
 import { UpdateTargetDto } from "./dto/update-target.dto"
+import { Target } from "./entities/target.entity"
+import { PaginationResponse } from "../core/reponses/pagination-responce"
 
 export class TargetController {
   constructor(private targetService: TargetService) {}
@@ -22,9 +24,19 @@ export class TargetController {
   async paginate(req: Request, res: Response): Promise<void> {
     const limit = +req.query.limit || 10
     const page = +req.query.page || 1
-    const books = await this.targetService.getTargets(page, limit)
+    const books = await this.targetService.getTargets(
+      limit,
+      page * limit - limit
+    )
+    const total = await this.targetService.getTotal()
+    const response = {
+      data: books,
+      total,
+      page,
+      limit,
+    } as PaginationResponse<Target>
 
-    res.json(books)
+    res.json(response)
   }
 
   async create(req: Request, res: Response) {

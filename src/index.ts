@@ -104,34 +104,12 @@ async function main() {
     await targetController.delete(req, res)
   })
 
-  app.get("/", (_req: Request, res: Response) => {
-    res.render("index")
-  })
-
-  app.get("/targets", async (_req: Request, res: Response) => {
-    await targetController.list(_req, res)
-  })
-
-  app.post("/targets/create", async (req: Request, res: Response) => {
-    await targetController.create(req, res)
-  })
-
-  app.use("/static", express.static("public"))
-
-  app.get("/targets/:id", async (req: Request, res: Response) => {
-    await targetController.single(req, res)
-  })
-
-  app.put("/targets/:id", async (req: Request, res: Response) => {
-    await targetController.update(req, res)
-  })
-
-  app.delete("/targets/:id", async (req: Request, res: Response) => {
-    await targetController.delete(req, res)
-  })
-
-  app.post("/spam", async (req: Request, res: Response) => {
+  apiRouter.post("/spam", async (req: Request, res: Response) => {
     await spamController.send(req, res)
+  })
+
+  apiRouter.get("/spam", async (req: Request, res: Response) => {
+    await spamController.getAll(req, res)
   })
 
   app.listen(port, () => console.log(`Server is listening on port ${port}!`))

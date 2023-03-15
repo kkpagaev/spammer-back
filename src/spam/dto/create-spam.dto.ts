@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from "class-validator"
+import { IsString, IsNotEmpty, IsNumber } from "class-validator"
 
 export class CreateSpamDto {
   @IsString()
@@ -8,4 +8,8 @@ export class CreateSpamDto {
   @IsString()
   @IsNotEmpty()
   content: string
+
+  @IsNumber({}, { each: true })
+  @IsNotEmpty()
+  targets: number[]
 }

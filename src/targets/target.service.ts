@@ -6,6 +6,9 @@ import { UpdateTargetDto } from "./dto/update-target.dto"
 import { Target } from "./entities/target.entity"
 
 export class TargetService extends Service {
+  getTotal() {
+    return this.targetRepository.count()
+  }
   constructor(private targetRepository: Repository<Target>) {
     super()
   }

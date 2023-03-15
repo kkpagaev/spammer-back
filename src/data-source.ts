@@ -1,9 +1,10 @@
 import { DataSource } from "typeorm"
 import { DBConfig } from "./core/config/db.config"
+import { Spam } from "./spam/enitities/spam.enity"
 import { Target } from "./targets/entities/target.entity"
 
 export const createDataSource = (cfg: DBConfig): DataSource => {
-  const entities = [Target]
+  const entities = [Target, Spam]
 
   const dataSource = new DataSource({
     type: "mysql",
