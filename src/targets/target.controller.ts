@@ -62,7 +62,7 @@ export class TargetController {
     try {
       const target = await this.targetService.updateTarget(id, dto)
 
-      res.redirect(`/targets/${target.id}`)
+      res.status(200).send(target)
     } catch (e) {
       res.status(400).send(e.message)
     }
